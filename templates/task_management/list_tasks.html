@@ -1,0 +1,86 @@
+{# list_tasks #}
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tasks Created</h1>
+    <a href="{% url 'create_task' %}" class="btn btn-primary">Add Task</a>
+    <hr>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Completed</th>
+            <th>Owner</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_created %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.completed }}</td>
+                <td>{{ task.owner }}</td>
+                <td>
+                    <a href="{% url 'edit_task' task.id %}" class="btn btn-info">Edit</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <h1>Tasks To Do</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Creator</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_owned_incomplete %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.creator }}</td>
+                <td>
+                    <a href="{% url 'mark_task_complete' task.id %}" class="btn btn-success">Complete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h1>Tasks Done</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Creator</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_owned_complete %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.creator }}</td>
+                <td>
+                    <a href="{% url 'mark_task_incomplete' task.id %}" class="btn btn-warning">Incomplete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
