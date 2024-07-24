@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Local Apps
+    "beecham_family_app",
+    "event_management",
+    "task_management",
 ]
 
 MIDDLEWARE = [

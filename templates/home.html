@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h5>Hello {{ request.user.first_name }} {{ request.user.last_name }}</h5>
+    <p>
+        Welcome to the Beecham Family App!<br>
+        Here, you can Create and manage Events, Tasks, Lists, and more! You can also chat with other family members, and
+        collaborate with location sharing and smart devices.
+    </p>
+    <hr>
+    <div class="row">
+        <div class="col-lg-3 col-md-4- col-12">
+            <a href="{% url 'user_edit' %}" class="text-decoration-none">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person-circle"></i> My Profile</h5>
+                        <p class="card-text">Quickly edit and update my Profile.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-4- col-12">
+            <a href="{% url 'calendar' %}" class="text-decoration-none">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-calendar-event"></i> My Events</h5>
+                        <p class="card-text">Quickly view and update my Events.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-4- col-12">
+            <a href="{% url 'list_tasks' %}" class="text-decoration-none">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-bag-dash"></i> My Tasks</h5>
+                        <p class="card-text">Quickly view and update my Tasks.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-4- col-12">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-card-list"></i> My Lists</h5>
+                        <p class="card-text">Quickly view and update my Lists.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-chat-dots"></i> Chat
+                        </h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6">
+            <a href="#" class="text-decoration-none">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-smartwatch"></i> Devices
+                        </h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <hr>
+
+    {# Show MyTask due today `tasks_due_today` #}
+    <h5>Tasks Due Today</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Creator</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_due_today %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.creator }}</td>
+                <td>
+                    {# If task is completed, dont show the complete button #}
+                    {% if not task.completed %}
+                        <a href="{% url 'mark_task_complete' task.id %}" class="btn btn-success">Complete</a>
+                    {% else %}
+                        <a href="{% url 'mark_task_incomplete' task.id %}" class="btn btn-warning">Incomplete</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+    <hr>
+    {# Show EventsToday `events_today` #}
+    <h5>Events Today</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events_today %}
+            <tr>
+                <td>{{ event.title }}</td>
+                <td>{{ event.start_time }}</td>
+                <td>{{ event.end_time }}</td>
+                <td>{{ event.description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

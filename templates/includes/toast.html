@@ -1,0 +1,27 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="toast show bottom-right-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl, {delay: 5000, autohide: true}) // Set delay to 5000 milliseconds and autohide to true
+    })
+    toastList.forEach(toast => toast.show());
+</script>
+
+<style>
+    .bottom-right-toast {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
+        z-index: 9999;
+    }
+</style>
