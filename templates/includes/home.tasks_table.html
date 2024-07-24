@@ -1,0 +1,36 @@
+{% load humanize %}
+{% if tasks_due_today %}
+    <h5>Tasks Due Today</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Task Creator</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_due_today %}
+            {# if due date is passed row must be red #}
+            <tr {% if task.due_date < now and not task.completed  %}class="table-danger"{% elif task.completed %}class="table-success"{% endif %}>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date | naturaltime }}</td>
+                <td>{{ task.creator }}</td>
+                <td>
+                    {# If task is completed, dont show the complete button #}
+                    {% if not task.completed %}
+                        <a href="{% url 'mark_task_complete' task.id %}" class="btn btn-success"><i class="bi bi-check"></i></a>
+                    {% else %}
+                        <a href="{% url 'mark_task_incomplete' task.id %}" class="btn btn-warning"><i class="bi bi-x"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You have no tasks due today!</p>
+{% endif %}

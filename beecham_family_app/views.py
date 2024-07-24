@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timezone
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -19,9 +19,9 @@ def home(request):
     tasks_due_today = Task.objects.filter(due_date__date=date.today(), owner=request.user)
 
     # Filter events that start today, assuming start_time is a DateTimeField and comparing only the date part
-    events_today = Event.objects.filter(start_time__date=date.today(), owner=request.user)
+    events_today = Event.objects.filter(start_time__date=date.today())
 
-    context = {"tasks_due_today": tasks_due_today, "events_today": events_today}
+    context = {"tasks_due_today": tasks_due_today, "events_today": events_today, 'now': datetime.now(timezone.utc)}
     return render(request, "home.html", context)
 
 

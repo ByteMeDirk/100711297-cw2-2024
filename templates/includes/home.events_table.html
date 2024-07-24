@@ -1,0 +1,27 @@
+{% load humanize %}
+{% if events_today %}
+    <h5>Events Today</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in events_today %}
+            {# If event is still coming up, mark blue, if event has passed, mark grey #}
+                <tr {% if event.start_time > now %}class="table-info"{% elif event.start_time < now %}class="table-secondary"{% endif %}>
+                <td>{{ event.title }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.start_time | naturaltime }}</td>
+                <td>{{ event.end_time| naturaltime  }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You have no events today!</p>
+{% endif %}

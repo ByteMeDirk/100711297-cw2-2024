@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -41,6 +43,7 @@ def list_tasks(request):
             "tasks_created": tasks_created,
             "tasks_owned_incomplete": tasks_owned_incomplete,
             "tasks_owned_complete": tasks_owned_complete,
+            'now': datetime.now(timezone.utc)
         },
     )
 

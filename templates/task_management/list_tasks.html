@@ -1,11 +1,9 @@
-{# list_tasks #}
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block content %}
-    <h1>Task Management</h1>
+    <h1>Task Management -  <a href="{% url 'create_task' %}" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></a></h1>
     <hr>
     <h5>Tasks Created</h5>
-        <a href="{% url 'create_task' %}" class="btn btn-primary">Add Task</a>
     {% if tasks_created %}
         <table class="table table-striped">
             <thead>
@@ -51,13 +49,13 @@
             </thead>
             <tbody>
             {% for task in tasks_owned_incomplete %}
-                <tr>
+                <tr {% if task.due_date < now and not task.completed  %}class="table-danger"{% endif %}>
                     <td>{{ task.title }}</td>
                     <td>{{ task.description }}</td>
-                    <td>{{ task.due_date }}</td>
+                    <td>{{ task.due_date | naturaltime }}</td>
                     <td>{{ task.creator }}</td>
                     <td>
-                        <a href="{% url 'mark_task_complete' task.id %}" class="btn btn-success">Complete</a>
+                        <a href="{% url 'mark_task_complete' task.id %}" class="btn btn-success"><i class="bi bi-check"></i></a>
                     </td>
                 </tr>
             {% endfor %}
@@ -83,10 +81,10 @@
                 <tr>
                     <td>{{ task.title }}</td>
                     <td>{{ task.description }}</td>
-                    <td>{{ task.due_date }}</td>
+                    <td>{{ task.due_date | naturaltime }}</td>
                     <td>{{ task.creator }}</td>
                     <td>
-                        <a href="{% url 'mark_task_incomplete' task.id %}" class="btn btn-warning">Incomplete</a>
+                        <a href="{% url 'mark_task_incomplete' task.id %}" class="btn btn-warning"><i class="bi bi-x"></i></a>
                     </td>
                 </tr>
             {% endfor %}
