@@ -24,7 +24,8 @@ def get_events(request):
             'title': event.title,
             'start': event.start_time.isoformat(),
             'end': event.end_time.isoformat(),
-            'description': event.description
+            'description': event.description,
+            'editable': event.owner == request.user
         })
     return JsonResponse(event_list, safe=False)
 
@@ -34,11 +35,18 @@ def get_events(request):
 def add_event(request):
     if request.method == 'POST':
         data = json.loads(request.body)
+        start_time = datetime.fromisoformat(data['start'])
+        end_time = datetime.fromisoformat(data['end'])
+
+        # Round to nearest 15 minutes
+        start_time = start_time.replace(minute=(start_time.minute // 15) * 15, second=0, microsecond=0)
+        end_time = end_time.replace(minute=(end_time.minute // 15) * 15, second=0, microsecond=0)
+
         event = Event(
             title=data['title'],
             description=data.get('description', ''),
-            start_time=datetime.fromisoformat(data['start']),
-            end_time=datetime.fromisoformat(data['end']),
+            start_time=start_time,
+            end_time=end_time,
             owner=request.user
         )
         event.save()
@@ -50,12 +58,24 @@ def add_event(request):
 @csrf_exempt
 def update_event(request, event_id):
     if request.method == 'POST':
-        event = Event.objects.get(id=event_id, owner=request.user)
+        try:
+            event = Event.objects.get(id=event_id, owner=request.user)
+        except Event.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Event not found or you do not have permission'},
+                                status=404)
+
         data = json.loads(request.body)
+        start_time = datetime.fromisoformat(data['start'])
+        end_time = datetime.fromisoformat(data['end'])
+
+        # Round to nearest 15 minutes
+        start_time = start_time.replace(minute=(start_time.minute // 15) * 15, second=0, microsecond=0)
+        end_time = end_time.replace(minute=(end_time.minute // 15) * 15, second=0, microsecond=0)
+
         event.title = data.get('title', event.title)
         event.description = data.get('description', event.description)
-        event.start_time = datetime.fromisoformat(data['start'])
-        event.end_time = datetime.fromisoformat(data['end'])
+        event.start_time = start_time
+        event.end_time = end_time
         event.save()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=400)
@@ -65,7 +85,12 @@ def update_event(request, event_id):
 @csrf_exempt
 def delete_event(request, event_id):
     if request.method == 'POST':
-        event = Event.objects.get(id=event_id, owner=request.user)
+        try:
+            event = Event.objects.get(id=event_id, owner=request.user)
+        except Event.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Event not found or you do not have permission'},
+                                status=404)
+
         event.delete()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=400)
