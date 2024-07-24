@@ -5,11 +5,15 @@ from .models import Task
 
 
 class TaskForm(forms.ModelForm):
+    """
+    Custom Task Form that extends the ModelForm.
+    """
+
     class Meta:
         model = Task
-        fields = ['title', 'description', 'due_date']
+        fields = ["title", "description", "due_date"]
         widgets = {
-            'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            "due_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
 
     title = forms.CharField(
@@ -46,5 +50,5 @@ class TaskForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
             }
-        )
+        ),
     )

@@ -1,8 +1,10 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.shortcuts import render, redirect
+
 from .forms import SignupForm, LoginForm, EditProfileForm
+
 
 @login_required(login_url="login")
 def home(request):
@@ -10,6 +12,7 @@ def home(request):
     This view renders the home page.
     """
     return render(request, "home.html")
+
 
 def user_register(request):
     """
@@ -45,6 +48,7 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, "user/login.html", {"form": form})
+
 
 def user_logout(request):
     """

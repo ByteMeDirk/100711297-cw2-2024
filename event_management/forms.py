@@ -4,12 +4,16 @@ from .models import Event
 
 
 class EventForm(forms.ModelForm):
+    """
+    Custom Event Form that extends the ModelForm.
+    """
+
     class Meta:
         model = Event
-        fields = ['title', 'description', 'start_time', 'end_time']
+        fields = ["title", "description", "start_time", "end_time"]
         widgets = {
-            'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            "start_time": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "end_time": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
 
     title = forms.CharField(
