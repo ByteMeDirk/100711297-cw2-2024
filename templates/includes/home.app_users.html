@@ -1,0 +1,19 @@
+<h5>Family Members</h5>
+<div class="row">
+    {% for user in users %}
+        <div class="col-lg-3 col-md-4 col-12 mb-4"> <!-- Added bottom margin -->
+            <div class="card h-100 {% if user.id == request.user.id %}bg-info text-white{% endif %}"> <!-- Ensures equal height for all cards -->
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% if not user.first_name %}
+                            {{ user.username }}
+                        {% else %}
+                            {{ user.first_name }} {{ user.last_name }}
+                        {% endif %}
+                    </h5>
+                    <p class="card-text">{{ user.email }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

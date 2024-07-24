@@ -3,6 +3,7 @@ from datetime import date, datetime, timezone
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from event_management.models import Event
@@ -21,7 +22,10 @@ def home(request):
     # Filter events that start today, assuming start_time is a DateTimeField and comparing only the date part
     events_today = Event.objects.filter(start_time__date=date.today())
 
-    context = {"tasks_due_today": tasks_due_today, "events_today": events_today, 'now': datetime.now(timezone.utc)}
+    # List all users on the app
+    users = User.objects.all()
+
+    context = {"tasks_due_today": tasks_due_today, "events_today": events_today, 'now': datetime.now(timezone.utc), 'users': users}
     return render(request, "home.html", context)
 
 
