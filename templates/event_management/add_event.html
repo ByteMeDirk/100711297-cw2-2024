@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Event</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Event</button>
+        <a href="{% url 'calendar' %}" class="btn btn-secondary">Back to Calendar</a>
+    </form>
+{% endblock %}
