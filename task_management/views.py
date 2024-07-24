@@ -10,13 +10,15 @@ from .models import Task
 def create_task(request):
     """
     This view allows users to create a new task.
+    task.creator is the current user.
+    task.owner is the assigned user.
     """
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
             task.creator = request.user
-            task.owner = request.user
+            task.owner = form.cleaned_data["owner"]
             task.save()
             return redirect("list_tasks")
     else:

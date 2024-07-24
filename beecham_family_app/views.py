@@ -1,8 +1,12 @@
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from event_management.models import Event
+from task_management.models import Task
 from .forms import SignupForm, LoginForm, EditProfileForm
 
 
@@ -11,7 +15,14 @@ def home(request):
     """
     This view renders the home page.
     """
-    return render(request, "home.html")
+    # Filter tasks that are due today, comparing only the date part of the due_date
+    tasks_due_today = Task.objects.filter(due_date__date=date.today(), owner=request.user)
+
+    # Filter events that start today, assuming start_time is a DateTimeField and comparing only the date part
+    events_today = Event.objects.filter(start_time__date=date.today(), owner=request.user)
+
+    context = {"tasks_due_today": tasks_due_today, "events_today": events_today}
+    return render(request, "home.html", context)
 
 
 def user_register(request):
