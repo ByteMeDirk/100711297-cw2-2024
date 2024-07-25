@@ -82,15 +82,5 @@
     {% include 'includes/home.events_table.html' %}
     <hr>
     {% include 'includes/home.app_users.html' %}
-    <div class="mt-5">
-        <nav class="navbar fixed-bottom navbar-light bg-light">
-            <div class="container">
-                <small>
-                    User ID: {{ request.user.id }} |
-                    Username: {{ request.user.username }} |
-                    Email: {{ request.user.email }}
-                </small>
-            </div>
-        </nav>
-    </div>
+    <br><br>
 {% endblock %}
