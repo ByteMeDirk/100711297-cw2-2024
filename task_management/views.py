@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -22,6 +23,7 @@ def create_task(request):
             task.creator = request.user
             task.owner = form.cleaned_data["owner"]
             task.save()
+            messages.success(request, "Task created successfully.")
             return redirect("list_tasks")
     else:
         form = TaskForm()
@@ -56,6 +58,7 @@ def edit_task(request, task_id):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
+            messages.success(request, "Task updated successfully.")
             return redirect("list_tasks")
     else:
         form = TaskForm(instance=task)
@@ -71,6 +74,7 @@ def delete_task(request, task_id):
     """
     task = Task.objects.get(id=task_id)
     task.delete()
+    messages.success(request, "Task deleted successfully.")
     return redirect("list_tasks")
 
 
@@ -82,6 +86,7 @@ def mark_task_complete(request, task_id):
     task = Task.objects.get(id=task_id)
     task.completed = True
     task.save()
+    messages.success(request, "Task marked as complete.")
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "home"))
 
 
@@ -93,4 +98,5 @@ def mark_task_incomplete(request, task_id):
     task = Task.objects.get(id=task_id)
     task.completed = False
     task.save()
+    messages.success(request, "Task marked as incomplete.")
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "home"))

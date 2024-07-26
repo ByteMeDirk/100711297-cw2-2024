@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -65,7 +66,9 @@ def add_event(request):
             owner=request.user,
         )
         event.save()
+        messages.success(request, "Event added successfully.")
         return JsonResponse({"status": "success", "id": event.id})
+    messages.error(request, "Failed to add event.")
     return JsonResponse({"status": "error"}, status=400)
 
 
@@ -104,7 +107,9 @@ def update_event(request, event_id):
         event.start_time = start_time
         event.end_time = end_time
         event.save()
+        messages.success(request, "Event updated successfully.")
         return JsonResponse({"status": "success"})
+    messages.error(request, "Failed to update event.")
     return JsonResponse({"status": "error"}, status=400)
 
 
@@ -127,5 +132,7 @@ def delete_event(request, event_id):
             )
 
         event.delete()
+        messages.success(request, "Event deleted successfully.")
         return JsonResponse({"status": "success"})
+    messages.error(request, "Failed to delete event.")
     return JsonResponse({"status": "error"}, status=400)
