@@ -21,3 +21,13 @@ class UserAuthenticationTests(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(username='newuser').exists())
+
+    def test_profile_creation_on_registration(self):
+        response = self.client.post(reverse('register'), {
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password1': 'testpassword123',
+            'password2': 'testpassword123',
+        })
+        self.assertEqual(response.status_code, 200)
+        user =User.objects.get(username='testuser')
